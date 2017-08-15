@@ -17,4 +17,20 @@ require_once './Facebook/autoload.php';
             foreach($res->getDecodedBody()["data"] as $photo) 
             {
                 file_put_contents("./fbDownload/$albumID/".$photo['id'].".jpg", file_get_contents($photo["images"][0]["source"]));
-            } 
+                $zip = new ZipArchive;
+                if ($zip->open(getcwd() . '/'.$albumID.'.zip', ZipArchive::CREATE) === TRUE) 
+                {
+                    $zip->addFile(getcwd() . "./fbDownload/$albumID/".$photo['id'].".jpg", "fbDownload/$albumID/".$photo['id'].".jpg");
+                    $zip->close();
+                    echo 'ok';
+                }
+                else 
+                {
+                    echo 'failed';
+                }
+            }
+            
+            ?>
+<a href="<?= $albumID.".zip" ?>">Download All Albums</a>
+            
+                
