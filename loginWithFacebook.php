@@ -10,7 +10,7 @@ $fb = new Facebook\Facebook([
  
 $helper = $fb->getRedirectLoginHelper();
  
-$permissions = ['email','user_photos']; // Optional permissions for more permission you need to send your application for review
+$permissions = ['email','user_photos'];
 $loginUrl = $helper->getLoginUrl('http://localhost/rtCamp/callback.php', $permissions);
 header("location: ".$loginUrl);
  
