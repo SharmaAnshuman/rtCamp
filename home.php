@@ -36,30 +36,31 @@ require_once './Facebook/autoload.php';
         $accessToken = $_SESSION["fb"];        
         $res = $fb->get('/me/albums', $accessToken);
         $x = $res->getDecodedBody();
-        echo "<ul class='thumbnails'>";
+        ?>
+         
+      <ul class="thumbnails">
+        <?php
         for($i=0;$i<sizeof($x["data"]);$i++)
         {
-            
-            echo "<li class='span3'>";
-            echo "<a href='album.php?token=".$x["data"][$i]["id"]."' class='thumbnail'>";
-            //echo "<center><h4>".$x["data"][$i]["name"]."</h4></center>";
+            ?><li class="span3">
+                <div class="thumbnail">
+            <?php
             $res = $fb->get('/'.$x["data"][$i]["id"].'/photos?fields=picture,name', $accessToken);
             $photo = $res->getDecodedBody()["data"];
-            echo '<img src="'.$photo[0]["picture"].'" height="50%" width="100%"></br>';
-            echo "<center><h4>".$x["data"][$i]["name"]."</h4></center>";
-            echo "</a>";
-            echo "</li>";
-            
+            echo '<img src="'.$photo[0]["picture"].'" >';
+            //echo "<h4>".$x["data"][$i]["name"]."</h4>";
+            ?>
+                    <div class="caption">
+              <h5><?php echo "<h4>".$x["data"][$i]["name"]."</h4>"; ?></h5>      
+              <p><a href="album.php?token=<?= $x["data"][$i]["id"] ?>" class="btn btn-primary">View</a> <a href="download.php?token=<?= $x["data"][$i]["id"] ?>" class="btn">Download</a></p>
+            </div>
+          </div>
+            </li>
+                    
+        <?php
         }
-        echo "</ul>";
-        
-        
-        
-       
-        ?>
-       
-         
-         
+        ?>  </ul>
+    
          
     <script src="/js/jquery.min.js"></script>    
     <script src="/js/bootstrap.min.js"></script>

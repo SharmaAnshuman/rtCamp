@@ -8,7 +8,7 @@ session_start();
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href="./css/jquery.bxslider.css" rel="stylesheet" />
+        <link rel="stylesheet" href="./css/superslides.css">
       </head>
       <body>
           <!-- Title start-->
@@ -37,37 +37,45 @@ require_once './Facebook/autoload.php';
         
             $res = $fb->get('/'.$albumID.'/photos?fields=picture,name,height,width,images', $accessToken);
             ?>
-          <div class='span12'>
-              <center>
-               <ul class="bxslider">
+
+              <div id="slides">
+                <div class="slides-container">
             <?php
             
             foreach($res->getDecodedBody()["data"] as $photo) 
             {
-                echo '<li><img class="d-block img-fluid" src="'.$photo["images"][0]["source"].'"/></li>';
+                echo '<img class="d-block img-fluid" src="'.$photo["images"][0]["source"].'"/>';
             } 
             ?>
-               </ul>
-              </center>
-          </div>
-                
+                </div>
+                    <nav class="slides-navigation">
+                        <a href="#" class="next">Next</a>
+                        <a href="#" class="prev">Previous</a>
+                  </nav>
+              </div>
 
           
-<!-- jQuery library -->
-<script src="./js/jquery-3.1.1.min.js"></script>
-<!-- bxSlider Javascript file -->
-<script src="./js/jquery.bxslider.js"></script>
-<script>
-	$(document).ready(function(){
-		$('.bxslider').bxSlider({
-			mode: 'horizontal',
-			moveSlides: 1,
-			slideMargin: 40,
-			infiniteLoop: true,
-			slideWidth: 660,
-			minSlides: 3,
-			maxSlides: 3,
-			speed: 800,
-		});
-	});
-</script>
+
+  <script src="./js/jquery.min.js"></script>
+  <script src="./javascripts/jquery.easing.1.3.js"></script>
+  <script src="./javascripts/jquery.animate-enhanced.min.js"></script>
+  <script src="./js/jquery.superslides.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+    $(function() {
+      $('#slides').superslides({
+        hashchange: true,
+        play: 2000
+      });
+
+      $('#slides').on('mouseenter', function() {
+        $(this).superslides('stop');
+        console.log('Stopped')
+      });
+      $('#slides').on('mouseleave', function() {
+        $(this).superslides('start');
+        console.log('Started')
+      });
+    });
+  </script>
+</body>
+</html>
