@@ -10,6 +10,9 @@ require_once './Facebook/autoload.php';
         $helper = $fb->getRedirectLoginHelper();
         $accessToken = $helper->getAccessToken();
         $_SESSION["fb"]= $accessToken->getValue();
+        $res = $fb->get('/me', $accessToken);
+        $x = $res->getDecodedBody();
+        $_SESSION["fbusernm"] = $x["name"];
         header("Location: home.php");
 ?>
         

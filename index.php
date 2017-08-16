@@ -1,6 +1,10 @@
 
 <?php
 session_start();
+if(isset($_GET["logout"])) {
+    session_destroy();
+    header("Location: index.php");
+}
  $_SESSION["APPID"]="644534512422310";
  $_SESSION["APPSID"]="26f02ddf3fcba817420c32bed87ce610";
  $_SESSION["VERID"]="v2.10";
@@ -20,8 +24,8 @@ session_start();
               <a class="brand" href="#">rtCamp</a>
               <ul class="nav">
                 <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">Portfolio</a></li>
-                <li><a href="#">About me</a></li>
+                <li><a href="https://www.ashusharma.com/portfolio/">Portfolio</a></li>
+                <li><a href="https://www.ashusharma.com/">About me</a></li>
               </ul>
             </div>
         </div>

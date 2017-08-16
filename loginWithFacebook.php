@@ -11,7 +11,7 @@ $fb = new Facebook\Facebook([
 $helper = $fb->getRedirectLoginHelper();
  
 $permissions = ['email','user_photos'];
-$loginUrl = $helper->getLoginUrl('http://localhost/rtCamp/callback.php', $permissions);
+$loginUrl = $helper->getLoginUrl('https://www.ashusharma.com/rtCamp/callback.php', $permissions);
 header("location: ".$loginUrl);
  
 ?>
