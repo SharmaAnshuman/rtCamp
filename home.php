@@ -1,5 +1,9 @@
 <?php
 session_start();
+if(isset($_REQUEST["msg"]))
+{
+        echo "<script>alert('".$_REQUEST["msg"]."');</script>";
+}
 ?>
 <!DOCTYPE html>
     <html>
@@ -43,6 +47,8 @@ require_once './Facebook/autoload.php';
          
             <ul class="thumbnails">
               <?php
+              $link="https://www.ashusharma.com/rtCamp/downloadSelected.php?test=1";
+              $link1="https://www.ashusharma.com/rtCamp/drive.php?test=1";
               for($i=0;$i<sizeof($x["data"]);$i++)
               {
                   ?><li class="span3">
@@ -51,22 +57,27 @@ require_once './Facebook/autoload.php';
                   $res = $fb->get('/'.$x["data"][$i]["id"].'/photos?fields=picture,name', $accessToken);
                   $photo = $res->getDecodedBody()["data"];
                   echo '<img src="'.$photo[0]["picture"].'" >';
+                  $link.="&c1[]=".$x["data"][$i]["id"];
+                  $link1.="&c1[]=".$x["data"][$i]["id"];
                   ?>
                           <div class="caption">
+                              
                     <h5><input type="checkbox" name="c1[]" value="<?= $x["data"][$i]["id"] ?>" class="checkbox"><?php echo " ".$x["data"][$i]["name"].""; ?></h5>      
                     <script>
                     $(document).ready(function(){
-                          $('mybtn<?= $i ?>').click(function(){
-                                $('mybtn<?= $i ?>').html("<img src='loading.gif' height='30px' width='30px'/>");
-                             $.get("downloadOne.php?token=<?= $x["data"][$i]["id"] ?>", function(data, status){
+                          $('mybtn<?= $i ?>.download').click(function(){
+                                $('mybtn<?= $i ?>.download').html("<img src='loading.gif' height='30px' width='30px'/>");
+                             $.get("downloadSelected.php?c1[]=<?= $x["data"][$i]["id"] ?>", function(data, status){
                                      window.location.href = data;
-                                     $('mybtn<?= $i ?>').html("<small>Download Againe!</small>");
+                                     $('mybtn<?= $i ?>.download').html("<small>Download Again!</small>");
                                 }); 
                           });
                         });
                     </script>
 
-                    <p><a href="album.php?token=<?= $x["data"][$i]["id"] ?>" class="btn btn-primary">View</a> <mybtn<?= $i?> class="btn">Download</mybtn></p>
+                    <p><a href="album.php?token=<?= $x["data"][$i]["id"] ?>" class="btn btn-primary">View</a> 
+                    <mybtn<?= $i?> class="btn download">Download</mybtn<?= $i ?>>
+                    <a href="drive.php?c1[]=<?= $x["data"][$i]["id"] ?>">Move</a> </p>
                   </div>
                 </div>
                   </li>
@@ -76,7 +87,10 @@ require_once './Facebook/autoload.php';
               ?>  
             </ul>
           
-              <input type="submit" class="btn btn-success" value="Download Selected Albums!"/>
+              <input name="action" type="submit" class="btn btn-success" value="Download Selected Albums!"/>
+              <input name="action" type="submit" class="btn btn-success" value="Move Selected Albums!"/> <!-- Naam badlu to downloadSelected.php ma pan id else ma change krvu -->
+              <a href="<?=$link?>" class="btn btn-success">Download All</a>
+              <a href="<?=$link1?>" class="btn btn-success">Move All</a>
             </form>
     <script src="/js/jquery.min.js"></script>    
     
