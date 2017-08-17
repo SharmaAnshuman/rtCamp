@@ -4,7 +4,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-require_once './Facebook/autoload.php';
+require_once __DIR__ . '/Facebook/autoload.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 $fb = new Facebook\Facebook([
