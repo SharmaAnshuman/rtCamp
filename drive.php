@@ -1,6 +1,8 @@
+
+
 <?php
 session_start();
-
+set_time_limit(0);
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
@@ -68,7 +70,7 @@ function albumDirCreateOrFind($service, $name, $parentId) {
             'fields' => 'id'))->id;
 }
 
-function fileCreateOrSkip($service, $name, $albumId, $data) {
+function fileCreateOrSkip($service, $name, $albumId, $imgUri) {
     
     $pageToken = null;
     do {
@@ -90,7 +92,7 @@ function fileCreateOrSkip($service, $name, $albumId, $data) {
     $file->setParents(array($albumId));
 
     $createdFile = $service->files->create($file, array(
-          'data' => $data,
+          'data' => file_get_contents($imgUri),
           'mimeType' => 'image/jpeg',
           'uploadType' => 'multipart'
         ));    
@@ -116,14 +118,15 @@ try {
     if (isset($_SESSION["googleToken"])) {
       $accessToken = json_decode($_SESSION["googleToken"], true);
     } else {
-        if(!isset($_GET["auth_code"])) {
+        if(!isset($_POST["auth_code"])) {
             $authUrl = $client->createAuthUrl();
-            echo '<form>Authentication code : <input type="text" name="auth_code" placeholder="Authentication code" /> <input type="submit" value="Submit" /></form>';    
+            $msg = "'Please Press Ok And Wait..'";
+            echo '<form method="post">Authentication code : <input type="text" name="auth_code" placeholder="Authentication code" /> <input type="submit" value="Submit and Move to GDrive" onClick="alert('.$msg.')"/></form>';    
             echo '<a target="_blank" href="'.$authUrl.'">Click here to generate your authentication code</a>';
             exit(0);
         } else {
             // Exchange authorization code for an access token.
-            $accessToken = $client->fetchAccessTokenWithAuthCode($_GET["auth_code"]);
+            $accessToken = $client->fetchAccessTokenWithAuthCode($_POST["auth_code"]);
 
             $_SESSION["googleToken"] = json_encode($accessToken);
             // Store the credentials to disk.
@@ -149,24 +152,29 @@ try {
         // album upload code
         
         $albumID = $_GET['c1'];
-        $albumsMoved = "";
+        $albumsMoved = 0;
         foreach($albumID as $aId) {
             $res = $fb->get('/'.$aId.'', $fbAccessToken);
             $alnm =$res->getDecodedBody();
-            $albumsMoved.=$alnm["name"].",";
+            $albumsMoved++;
             $albumFolderId = albumDirCreateOrFind($service, $alnm["name"], $fbUserFolderId);
-            $res = $fb->get('/'.$aId.'/photos?fields=picture,name,height,width,images,id', $fbAccessToken);
-            foreach($res->getDecodedBody()["data"] as $photo) {
-                $photoName = $photo["id"];
-                $photoUri = $photo["images"][0]["source"];
-                $photoData = file_get_contents($photoUri);
-                
-                fileCreateOrSkip($service, $photoName, $albumFolderId, $photoData);
-            }
+            $after = "";
+            do {
+              $res = $fb->get('/'.$aId.'/photos?fields=picture,name,height,width,images,id&limit=9999'.$after, $fbAccessToken)->getDecodedBody();
+              foreach($res["data"] as $photo) {
+                  $photoName = $photo["id"];
+                  $photoUri = $photo["images"][0]["source"];
+                  fileCreateOrSkip($service, $photoName, $albumFolderId, $photoUri);
+              }
+              $after="";
+              if(isset($res["paging"]) && isset($res["paging"]["cursors"]) && isset($res["paging"]["cursors"]["after"]))  {
+                $after = "&after=".$res["paging"]["cursors"]["after"];
+              }
+            } while(strlen($after)>0);
         }
            
         //// APP USES END
-       header("Location: home.php?msg=".$albumsMoved." albums moved successfully to GDrive.");
+        header("Location: home.php?msg=".$albumsMoved." albums moved successfully to GDrive.");
     } else {
         echo "Something wrong happened !!";
     }
