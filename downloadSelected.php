@@ -20,7 +20,7 @@ if($actionName == "Move Selected Albums!") {
           'default_graph_version' => $_SESSION['VERID'],
           ]);
 
-    $i=0; 
+    $tmp=0; 
     $accessToken = $_SESSION["fb"];        
     $albumID = $_GET['c1'];
     $folder = __DIR__;
@@ -29,18 +29,19 @@ if($actionName == "Move Selected Albums!") {
     {
             for($i=0;$i<count($albumID);$i++)
             {
+            	$tmp = 0;
                 $res = $fb->get('/'.$albumID[$i].'', $accessToken);
                 $alnm =$res->getDecodedBody();
                 do
                 {
-                    if($i==0)       
+                    if($tmp==0)       
                     {
                         $res = $fb->get('/'.$albumID[$i].'/photos?fields=picture,name,height,width,images,id&limit=99999', $accessToken);
                         foreach($res->getDecodedBody()["data"] as $photo)
                         {
                             $zip->addFromString($alnm['name']."/".$photo['id'].".jpg", file_get_contents($photo["images"][0]["source"]));
-                            $i++;
                         }
+                        $tmp++;
                     }
                     else
                     {
@@ -49,8 +50,8 @@ if($actionName == "Move Selected Albums!") {
                         foreach($res->getDecodedBody()["data"] as $photo)
                         {
                             $zip->addFromString($alnm['name']."/".$photo['id'].".jpg", file_get_contents($photo["images"][0]["source"]));
-                            $i++;
-                        }       
+                        }   
+                        $tmp++;    
                     }
                 }while(isset($res->getDecodedBody()["paging"]["next"]));
             }
@@ -59,5 +60,5 @@ if($actionName == "Move Selected Albums!") {
 		if(isset($_GET["click"])) {
                echo "./".$_SESSION['fbusernm'].".zip";
 		} else {
-               header("location: ./".$_SESSION['fbusernm'].".zip");
+             header("location: ./".$_SESSION['fbusernm'].".zip");
 		}
