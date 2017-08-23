@@ -26,12 +26,12 @@ if(isset($_GET["logout"])) {
                 <li class="active"><a href="#">Home</a></li>
                 <li><a href="https://www.ashusharma.com/portfolio/">Portfolio</a></li>
                 <li><a href="https://www.ashusharma.com/">About me</a></li>
-                  <?php
-				if(isset($_SESSION['fb']))
-				{
-					?><li><a href="https://www.ashusharma.com/rtCamp/index.php?logout=t">Logout</a></li><?php
-				}
-				?>
+                <?php
+        if(isset($_SESSION['fb']))
+        {
+          ?><li><a href="https://www.ashusharma.com/rtCamp/index.php?logout=t">Logout</a></li><?php
+        }
+        ?>
               </ul>
             </div>
         </div>
@@ -39,10 +39,11 @@ if(isset($_GET["logout"])) {
           <div class="container-fluid">
             <div class="row-fluid">
               <div class="span2">
-                Anshuman Sharma
+                
               </div>
               <div class="span10">
-                  <a class="btn btn-primary" href="loginWithFacebook.php" >Login with Facebook</a>
+                  Assignment-2: Facebook-Photos Challenge
+                  <h1><a class="btn btn-primary" href="loginWithFacebook.php" >Login with Facebook</a></h1>
               </div>
             </div>
           </div>
