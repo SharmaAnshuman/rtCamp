@@ -24,6 +24,12 @@ if(isset($_REQUEST["msg"]))
                 <li class="active"><a href="http://www.ashusharma.com/rtCamp/">Home</a></li>
                 <li><a href="http://www.ashusharma.com/portfolio/">Portfolio</a></li>
                 <li><a href="http://www.ashusharma.com/">About me</a></li>
+          <?php
+        if(isset($_SESSION['fb']))
+        {
+          ?><li><a href="https://www.ashusharma.com/rtCamp/index.php?logout=t">Logout</a></li><?php
+        }
+        ?>
               </ul>
             </div>
         </div>
