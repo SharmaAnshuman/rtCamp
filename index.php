@@ -26,6 +26,12 @@ if(isset($_GET["logout"])) {
                 <li class="active"><a href="#">Home</a></li>
                 <li><a href="https://www.ashusharma.com/portfolio/">Portfolio</a></li>
                 <li><a href="https://www.ashusharma.com/">About me</a></li>
+                  <?php
+				if(isset($_SESSION['fb']))
+				{
+					?><li><a href="https://www.ashusharma.com/rtCamp/index.php?logout=t">Logout</a></li><?php
+				}
+				?>
               </ul>
             </div>
         </div>
