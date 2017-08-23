@@ -48,6 +48,7 @@ require_once './Facebook/autoload.php';
             <ul class="thumbnails">
               <?php
               $link="https://www.ashusharma.com/rtCamp/downloadSelected.php?test=1";
+              $linkAll ="https://www.ashusharma.com/rtCamp/downloadAll.php?test=1";
               $link1="https://www.ashusharma.com/rtCamp/drive.php?test=1";
               for($i=0;$i<sizeof($x["data"]);$i++)
               {
@@ -58,7 +59,9 @@ require_once './Facebook/autoload.php';
                   $photo = $res->getDecodedBody()["data"];
                   echo '<img src="'.$photo[0]["picture"].'" >';
                   $link.="&c1[]=".$x["data"][$i]["id"];
+                  $linkAll.="&c1[]=".$x["data"][$i]["id"];
                   $link1.="&c1[]=".$x["data"][$i]["id"];
+                  
                   ?>
                           <div class="caption">
                               
@@ -66,8 +69,9 @@ require_once './Facebook/autoload.php';
                     <script>
                     $(document).ready(function(){
                           $('mybtn<?= $i ?>.download').click(function(){
+                                alert("Please wait your albums download soon..");
                                 $('mybtn<?= $i ?>.download').html("<img src='loading.gif' height='30px' width='30px'/>");
-                             $.get("downloadSelected.php?c1[]=<?= $x["data"][$i]["id"] ?>", function(data, status){
+                             $.get("downloadSelected.php?click=single&c1[]=<?= $x["data"][$i]["id"] ?>", function(data, status){
                                      window.location.href = data;
                                      $('mybtn<?= $i ?>.download').html("<small>Download Again!</small>");
                                 }); 
@@ -87,10 +91,10 @@ require_once './Facebook/autoload.php';
               ?>  
             </ul>
           
-              <input name="action" type="submit" class="btn btn-success" value="Download Selected Albums!"/>
-              <input name="action" type="submit" class="btn btn-success" value="Move Selected Albums!"/> <!-- Naam badlu to downloadSelected.php ma pan id else ma change krvu -->
-              <a href="<?=$link?>" class="btn btn-success">Download All</a>
-              <a href="<?=$link1?>" class="btn btn-success">Move All</a>
+              <input name="action" type="submit" class="btn btn-success" value="Download Selected Albums!" onclick="alert('Click Ok and Please Wait..')" />
+              <input name="action" type="submit" class="btn btn-success" value="Move Selected Albums!" onclick="alert('Click Ok and Please Wait..')"/> <!-- Naam badlu to downloadSelected.php ma pan id else ma change krvu -->
+              <a href="<?= $linkAll?>" class="btn btn-success" onclick="alert('Click Ok and Please Wait..')">Download All</a>
+              <a href="<?=$link1?>" class="btn btn-success" onclick="alert('Click Ok and Please Wait..')">Move All</a>
             </form>
     <script src="/js/jquery.min.js"></script>    
     
