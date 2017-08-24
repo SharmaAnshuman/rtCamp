@@ -17,14 +17,6 @@ $fb = new Facebook\Facebook([
 
 $fbAccessToken = isset($_SESSION["fb"]) ? $_SESSION["fb"] : null;        
 
-function expandHomeDirectory($path) {
-  $homeDirectory = getenv('HOME');
-  if (empty($homeDirectory)) {
-    $homeDirectory = getenv('HOMEDRIVE') . getenv('HOMEPATH');
-  }
-  return str_replace('~', realpath($homeDirectory), $path);
-}
-
 function userDirCreateOrFind($service, $name) {
     $pageToken = null;
     do {
@@ -114,7 +106,7 @@ try {
     $client->setAccessType('offline');
     //$client->setHttpClient(new GuzzleHttp\Client(['verify' => false]));
     $accessToken = null;
-    $credentialsPath = expandHomeDirectory(CREDENTIALS_PATH);
+    
     if (isset($_SESSION["googleToken"])) {
       $accessToken = json_decode($_SESSION["googleToken"], true);
     } else {
